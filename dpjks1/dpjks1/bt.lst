@@ -1,0 +1,57 @@
+C51 COMPILER V9.54   BT                                                                    09/09/2020 20:05:33 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE BT
+OBJECT MODULE PLACED IN bt.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE hardware\usart\bt.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\hardware\motor;.\sys
+                    -tem\delay;.\hardware\temperature;.\hardware\lumination;.\hardware\usart;.\hardware\display_lcd12864;.\hardware\display_l
+                    -cd1602;.\system\control;.\system\iic;.\system\timer;.\hardware\clock) DEBUG OBJECTEXTEND PRINT(.\bt.lst) TABS(2) OBJECT(
+                    -bt.obj)
+
+line level    source
+
+   1          #include "reg52.h"  
+   2          #include "main.h"
+   3          
+   4          /*******************************************************************************
+   5          * 函数名         :UsartInit()
+   6          * 函数功能       :设置串口
+   7          * 输入           : 无
+   8          * 输出           : 无
+   9          *******************************************************************************/
+  10          void UsartInit()
+  11          {
+  12   1        SCON=0X50;      //设置为工作方式1
+  13   1        TMOD=0X20;      //设置计数器工作方式2
+  14   1        PCON=0X80;      //波特率加倍
+  15   1        TH1=0XF3;       //计数器初始值设置，注意波特率是4800的
+  16   1        TL1=0XF3;
+  17   1        ES=1;           //打开接收中断
+  18   1        EA=1;           //打开总中断
+  19   1        TR1=1;          //打开计数器
+  20   1      }
+  21          
+  22          //void Usart() interrupt 4
+  23          //{
+  24          //  u8 receiveData;
+  25          
+  26          //  receiveData=SBUF;//出去接收到的数据
+  27          //  RI = 0;//清除接收中断标志位
+  28          //  SBUF=receiveData;//将接收到的数据放入到发送寄存器
+  29          //  while(!TI);      //等待发送数据完成
+  30          //  TI=0;            //清除发送完成标志位
+  31          //}
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     22    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

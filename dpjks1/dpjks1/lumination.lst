@@ -1,0 +1,50 @@
+C51 COMPILER V9.54   LUMINATION                                                            09/09/2020 20:05:31 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE LUMINATION
+OBJECT MODULE PLACED IN lumination.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE hardware\lumination\lumination.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\hardwar
+                    -e\motor;.\system\delay;.\hardware\temperature;.\hardware\lumination;.\hardware\usart;.\hardware\display_lcd12864;.\hardw
+                    -are\display_lcd1602;.\system\control;.\system\iic;.\system\timer;.\hardware\clock) DEBUG OBJECTEXTEND PRINT(.\lumination
+                    -.lst) TABS(2) OBJECT(lumination.obj)
+
+line level    source
+
+   1          #include "main.h"
+   2          
+   3          unsigned char ReadADC(unsigned char Chl)
+   4           {
+   5   1         unsigned char Val;
+   6   1         Start_I2c();               //启动总线
+   7   1         SendByte(AddWr);             //发送器件地址
+   8   1           if(ack==0)return(0);
+   9   1         SendByte(0x40|Chl);            //发送器件子地址
+  10   1           if(ack==0)return(0);
+  11   1         Start_I2c();
+  12   1         SendByte(AddWr+1);
+  13   1            if(ack==0)return(0);
+  14   1         Val=RcvByte();
+  15   1         NoAck_I2c();                 //发送非应位
+  16   1         Stop_I2c();                  //结束总线
+  17   1        return(Val);
+  18   1       }
+  19           /*
+  20            num=255-ReadADC(1);//值取差值，用于显示光强越小，数值越小
+  21           TempData[0]=dofly_DuanMa[num/100];    
+  22           TempData[1]=dofly_DuanMa[(num%100)/10];
+  23           TempData[2]=dofly_DuanMa[(num%100)%10];
+  24           */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     58    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

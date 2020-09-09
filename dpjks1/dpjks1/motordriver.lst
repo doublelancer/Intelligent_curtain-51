@@ -1,0 +1,146 @@
+C51 COMPILER V9.54   MOTORDRIVER                                                           09/09/2020 20:13:21 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MOTORDRIVER
+OBJECT MODULE PLACED IN motordriver.obj
+COMPILER INVOKED BY: D:\keil5\C51\BIN\C51.EXE hardware\motor\motordriver.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\hardware\mo
+                    -tor;.\system\delay;.\hardware\temperature;.\hardware\lumination;.\hardware\usart;.\hardware\display_lcd12864;.\hardware\
+                    -display_lcd1602;.\system\control;.\system\iic;.\system\timer;.\hardware\clock) DEBUG OBJECTEXTEND PRINT(.\motordriver.ls
+                    -t) TABS(2) OBJECT(motordriver.obj)
+
+line level    source
+
+   1          //#include <reg52.h>
+   2          //#include "intrins.h"
+   3          #include "main.h"
+   4          //#include  "motordriver.h"
+   5          
+   6          /*
+   7            io口的改改
+   8          */
+   9          //sbit DULA=P2^6;//数码管段选
+  10          //unsigned char MotorFlag;  //未定义的全局变量，由键盘控制
+  11          unsigned char code F_Rotation[4]={0x10,0x08,0x04,0x02}; //正转表格，换算成二进制 0001 0000，0000 1000，000
+             -0 0100，0000 0010
+  12          unsigned char code B_Rotation[4]={0x02,0x04,0x08,0x10}; //反转表格，换算成二进制 0000 0010，0000 0100，000
+             -0 1000，0001 0000
+  13          
+  14          
+  15          
+  16          /******************************************************************
+  17          *两个延时函数
+  18          ******************************************************************/
+  19          void Delay1(unsigned int i)//延时
+  20          {
+  21   1       while(i--);
+  22   1      }
+  23          
+  24          
+  25          void delay1s(void)   //误差 0us
+  26          {
+  27   1          unsigned char a,b,c;
+  28   1          for(c=167;c>0;c--)
+  29   1              for(b=171;b>0;b--)
+  30   1                  for(a=16;a>0;a--);
+  31   1          _nop_();  //if Keil,require use intrins.h
+  32   1      }
+  33          
+  34          /******************************************************************
+  35          *函数：Motor
+  36          *功能：根据MotorFlag参数判断电机运动状态
+  37          *      MotorFlag=0  电机暂停
+  38          *      MotorFlag=1  电机正转
+  39          *      MotorFlag=2  电机反转
+  40          ******************************************************************/
+  41          
+  42          void Motor_F()  //拉开
+  43          {
+  44   1         unsigned char i;
+  45   1        unsigned int x;
+  46   1        
+  47   1         for(x=600;x>0;x--){
+  48   2            for(i=0;i<4;i++)      //4相
+  49   2              { 
+  50   3             P1=F_Rotation[i];  //输出对应的相 可以自行换成反转表格
+C51 COMPILER V9.54   MOTORDRIVER                                                           09/09/2020 20:13:21 PAGE 2   
+
+  51   3             Delay1(500);        //改变这个参数可以调整电机转速 ,数字越小，转速越大
+  52   3            }
+  53   2          }
+  54   1      
+  55   1      }
+  56          
+  57          
+  58          void Motor_B() //关闭
+  59          {
+  60   1        unsigned char i;
+  61   1        unsigned int x;
+  62   1       for(x=600;x>0;x--){
+  63   2             for(i=0;i<4;i++)      //4相
+  64   2               {
+  65   3               P1=B_Rotation[i];  //输出对应的相 可以自行换成反转表格
+  66   3               Delay1(500);        //改变这个参数可以调整电机转速 ,数字越小，转速越大
+  67   3             }
+  68   2           }
+  69   1      }
+  70          
+  71          
+  72          //void MotorDrive()
+  73          //{
+  74          //  
+  75          ////初始化配置  
+  76          //  unsigned char i;
+  77          //  unsigned int x;
+  78          
+  79          //  
+  80          ///*********关掉数码管的段选信号。阻止数码管受到P0口信号的影响******/
+  81          ////  P0=0Xff;
+  82          ////  Delay(500);
+  83          ////  DULA=1;
+  84          ////  Delay(500);
+  85          ////  DULA=0;
+  86          ///******************************************************************/
+  87          //  
+  88          //  
+  89          //  
+  90          
+  91          //  if(MotorFlag==1){        //判断正转
+  92          //    for(x=600;x>0;x--){
+  93          //      for(i=0;i<4;i++)      //4相
+  94          //        { 
+  95          //       P0=F_Rotation[i];  //输出对应的相 可以自行换成反转表格
+  96          //       Delay1(500);        //改变这个参数可以调整电机转速 ,数字越小，转速越大
+  97          //      }
+  98          //    }
+  99          //  }
+ 100          //  if(MotorFlag==2){        //判断反转
+ 101          //     for(x=100;x>0;x--){
+ 102          //       for(i=0;i<4;i++)      //4相
+ 103          //         {
+ 104          //         P0=B_Rotation[i];  //输出对应的相 可以自行换成反转表格
+ 105          //         Delay1(500);        //改变这个参数可以调整电机转速 ,数字越小，转速越大
+ 106          //       }
+ 107          //     }
+ 108          //   }
+ 109          //  
+ 110          //   if(MotorFlag==0){   //判断不进行操作
+ 111          //     // while(1);
+ 112          //   }
+C51 COMPILER V9.54   MOTORDRIVER                                                           09/09/2020 20:13:21 PAGE 3   
+
+ 113          //   
+ 114          // }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     85    ----
+   CONSTANT SIZE    =      8    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
